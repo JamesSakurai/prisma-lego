@@ -1,5 +1,4 @@
 import React from 'react'
-import Block from '../components/Block'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 

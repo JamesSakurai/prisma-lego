@@ -1,12 +1,14 @@
-type Post {
-  id: ID! @unique
-  isPublished: Boolean!
-  title: String!
-  text: String!
-}
+
 type Block {
   id: ID! @unique
   size: String!
   color: String!
   price: String!
+}
+
+type Review {
+  id: ID! @unique
+  username: String!
+  product: String!
+  comment: String!
 }

@@ -12,11 +12,11 @@ type Block implements Node {
   price: String!
 }
 
-type Post implements Node {
+type Review implements Node {
   id: ID!
-  isPublished: Boolean!
-  title: String!
-  text: String!
+  username: String!
+  product: String!
+  comment: String!
 }
 
 
@@ -28,7 +28,7 @@ type AggregateBlock {
   count: Int!
 }
 
-type AggregatePost {
+type AggregateReview {
   count: Int!
 }
 
@@ -371,18 +371,18 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createPost(data: PostCreateInput!): Post!
   createBlock(data: BlockCreateInput!): Block!
-  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  createReview(data: ReviewCreateInput!): Review!
   updateBlock(data: BlockUpdateInput!, where: BlockWhereUniqueInput!): Block
-  deletePost(where: PostWhereUniqueInput!): Post
+  updateReview(data: ReviewUpdateInput!, where: ReviewWhereUniqueInput!): Review
   deleteBlock(where: BlockWhereUniqueInput!): Block
-  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  deleteReview(where: ReviewWhereUniqueInput!): Review
   upsertBlock(where: BlockWhereUniqueInput!, create: BlockCreateInput!, update: BlockUpdateInput!): Block!
-  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput!): BatchPayload!
+  upsertReview(where: ReviewWhereUniqueInput!, create: ReviewCreateInput!, update: ReviewUpdateInput!): Review!
   updateManyBlocks(data: BlockUpdateInput!, where: BlockWhereInput!): BatchPayload!
-  deleteManyPosts(where: PostWhereInput!): BatchPayload!
+  updateManyReviews(data: ReviewUpdateInput!, where: ReviewWhereInput!): BatchPayload!
   deleteManyBlocks(where: BlockWhereInput!): BatchPayload!
+  deleteManyReviews(where: ReviewWhereInput!): BatchPayload!
 }
 
 enum MutationType {
@@ -423,10 +423,26 @@ type PageInfo {
   endCursor: String
 }
 
+type Query {
+  blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
+  reviews(where: ReviewWhereInput, orderBy: ReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Review]!
+  block(where: BlockWhereUniqueInput!): Block
+  review(where: ReviewWhereUniqueInput!): Review
+  blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
+  reviewsConnection(where: ReviewWhereInput, orderBy: ReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ReviewConnection!
+  """
+  Fetches an object given its ID
+  """
+  node("""
+  The ID of an object
+  """
+  id: ID!): Node
+}
+
 """
 A connection to a list of items.
 """
-type PostConnection {
+type ReviewConnection {
   """
   Information to aid in pagination.
   """
@@ -434,68 +450,68 @@ type PostConnection {
   """
   A list of edges.
   """
-  edges: [PostEdge]!
-  aggregate: AggregatePost!
+  edges: [ReviewEdge]!
+  aggregate: AggregateReview!
 }
 
-input PostCreateInput {
-  isPublished: Boolean!
-  title: String!
-  text: String!
+input ReviewCreateInput {
+  username: String!
+  product: String!
+  comment: String!
 }
 
 """
 An edge in a connection.
 """
-type PostEdge {
+type ReviewEdge {
   """
   The item at the end of the edge.
   """
-  node: Post!
+  node: Review!
   """
   A cursor for use in pagination.
   """
   cursor: String!
 }
 
-enum PostOrderByInput {
+enum ReviewOrderByInput {
   id_ASC
   id_DESC
-  isPublished_ASC
-  isPublished_DESC
-  title_ASC
-  title_DESC
-  text_ASC
-  text_DESC
+  username_ASC
+  username_DESC
+  product_ASC
+  product_DESC
+  comment_ASC
+  comment_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
-type PostPreviousValues {
+type ReviewPreviousValues {
   id: ID!
-  isPublished: Boolean!
-  title: String!
-  text: String!
+  username: String!
+  product: String!
+  comment: String!
 }
 
-type PostSubscriptionPayload {
+type ReviewSubscriptionPayload {
   mutation: MutationType!
-  node: Post
+  node: Review
   updatedFields: [String!]
-  previousValues: PostPreviousValues
+  previousValues: ReviewPreviousValues
 }
 
-input PostSubscriptionWhereInput {
+input ReviewSubscriptionWhereInput {
   """
   Logical AND on all given filters.
   """
-  AND: [PostSubscriptionWhereInput!]
+  AND: [ReviewSubscriptionWhereInput!]
   """
   Logical OR on all given filters.
   """
-  OR: [PostSubscriptionWhereInput!]
+  OR: [ReviewSubscriptionWhereInput!]
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
@@ -512,24 +528,24 @@ input PostSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: PostWhereInput
+  node: ReviewWhereInput
 }
 
-input PostUpdateInput {
-  isPublished: Boolean
-  title: String
-  text: String
+input ReviewUpdateInput {
+  username: String
+  product: String
+  comment: String
 }
 
-input PostWhereInput {
+input ReviewWhereInput {
   """
   Logical AND on all given filters.
   """
-  AND: [PostWhereInput!]
+  AND: [ReviewWhereInput!]
   """
   Logical OR on all given filters.
   """
-  OR: [PostWhereInput!]
+  OR: [ReviewWhereInput!]
   id: ID
   """
   All values that are not equal to given value.
@@ -583,140 +599,172 @@ input PostWhereInput {
   All values not ending with the given string.
   """
   id_not_ends_with: ID
-  isPublished: Boolean
+  username: String
   """
   All values that are not equal to given value.
   """
-  isPublished_not: Boolean
-  title: String
-  """
-  All values that are not equal to given value.
-  """
-  title_not: String
+  username_not: String
   """
   All values that are contained in given list.
   """
-  title_in: [String!]
+  username_in: [String!]
   """
   All values that are not contained in given list.
   """
-  title_not_in: [String!]
+  username_not_in: [String!]
   """
   All values less than the given value.
   """
-  title_lt: String
+  username_lt: String
   """
   All values less than or equal the given value.
   """
-  title_lte: String
+  username_lte: String
   """
   All values greater than the given value.
   """
-  title_gt: String
+  username_gt: String
   """
   All values greater than or equal the given value.
   """
-  title_gte: String
+  username_gte: String
   """
   All values containing the given string.
   """
-  title_contains: String
+  username_contains: String
   """
   All values not containing the given string.
   """
-  title_not_contains: String
+  username_not_contains: String
   """
   All values starting with the given string.
   """
-  title_starts_with: String
+  username_starts_with: String
   """
   All values not starting with the given string.
   """
-  title_not_starts_with: String
+  username_not_starts_with: String
   """
   All values ending with the given string.
   """
-  title_ends_with: String
+  username_ends_with: String
   """
   All values not ending with the given string.
   """
-  title_not_ends_with: String
-  text: String
+  username_not_ends_with: String
+  product: String
   """
   All values that are not equal to given value.
   """
-  text_not: String
+  product_not: String
   """
   All values that are contained in given list.
   """
-  text_in: [String!]
+  product_in: [String!]
   """
   All values that are not contained in given list.
   """
-  text_not_in: [String!]
+  product_not_in: [String!]
   """
   All values less than the given value.
   """
-  text_lt: String
+  product_lt: String
   """
   All values less than or equal the given value.
   """
-  text_lte: String
+  product_lte: String
   """
   All values greater than the given value.
   """
-  text_gt: String
+  product_gt: String
   """
   All values greater than or equal the given value.
   """
-  text_gte: String
+  product_gte: String
   """
   All values containing the given string.
   """
-  text_contains: String
+  product_contains: String
   """
   All values not containing the given string.
   """
-  text_not_contains: String
+  product_not_contains: String
   """
   All values starting with the given string.
   """
-  text_starts_with: String
+  product_starts_with: String
   """
   All values not starting with the given string.
   """
-  text_not_starts_with: String
+  product_not_starts_with: String
   """
   All values ending with the given string.
   """
-  text_ends_with: String
+  product_ends_with: String
   """
   All values not ending with the given string.
   """
-  text_not_ends_with: String
+  product_not_ends_with: String
+  comment: String
+  """
+  All values that are not equal to given value.
+  """
+  comment_not: String
+  """
+  All values that are contained in given list.
+  """
+  comment_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  comment_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  comment_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  comment_lte: String
+  """
+  All values greater than the given value.
+  """
+  comment_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  comment_gte: String
+  """
+  All values containing the given string.
+  """
+  comment_contains: String
+  """
+  All values not containing the given string.
+  """
+  comment_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  comment_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  comment_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  comment_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  comment_not_ends_with: String
 }
 
-input PostWhereUniqueInput {
+input ReviewWhereUniqueInput {
   id: ID
 }
 
-type Query {
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
-  blocks(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Block]!
-  post(where: PostWhereUniqueInput!): Post
-  block(where: BlockWhereUniqueInput!): Block
-  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
-  blocksConnection(where: BlockWhereInput, orderBy: BlockOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlockConnection!
-  """
-  Fetches an object given its ID
-  """
-  node("""
-  The ID of an object
-  """
-  id: ID!): Node
-}
-
 type Subscription {
-  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   block(where: BlockSubscriptionWhereInput): BlockSubscriptionPayload
+  review(where: ReviewSubscriptionWhereInput): ReviewSubscriptionPayload
 }

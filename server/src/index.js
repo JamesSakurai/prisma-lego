@@ -3,23 +3,32 @@ const { Prisma } = require('prisma-binding')
 
 const resolvers = {
   Query: {
-    feed(parent, args, ctx, info) {
-      return ctx.db.query.posts({ where: { isPublished: true } }, info)
-    },
+    // feed(parent, args, ctx, info) {
+    //   return ctx.db.query.posts({ where: { isPublished: true } }, info)
+    // },
     blocks(parent, args, ctx, info) {
       return ctx.db.query.blocks({ }, info)
     },
-    drafts(parent, args, ctx, info) {
-      return ctx.db.query.posts({ where: { isPublished: false } }, info)
+    reviews(parent, args, ctx, info) {
+      return ctx.db.query.reviews({ }, info)
     },
-    post(parent, { id }, ctx, info) {
-      return ctx.db.query.post({ where: { id: id } }, info)
-    },
+    // drafts(parent, args, ctx, info) {
+    //   return ctx.db.query.posts({ where: { isPublished: false } }, info)
+    // },
+    // post(parent, { id }, ctx, info) {
+    //   return ctx.db.query.post({ where: { id: id } }, info)
+    // },
   },
   Mutation: {
-    createDraft(parent, { title, text }, ctx, info) {
-      return ctx.db.mutation.createPost(
-        { data: { title, text, isPublished: false } },
+    // createDraft(parent, { title, text }, ctx, info) {
+    //   return ctx.db.mutation.createPost(
+    //     { data: { title, text, isPublished: false } },
+    //     info,
+    //   )
+    // },
+    createReview(parent, { username, product, comment }, ctx, info) {
+      return ctx.db.mutation.createReview(
+        { data: { username, product, comment } },
         info,
       )
     },
@@ -29,18 +38,18 @@ const resolvers = {
         info,
       )
     },
-    deletePost(parent, { id }, ctx, info) {
-      return ctx.db.mutation.deletePost({where: { id } }, info)
-    },
-    publish(parent, { id }, ctx, info) {
-      return ctx.db.mutation.updatePost(
-        {
-          where: { id },
-          data: { isPublished: true },
-        },
-        info,
-      )
-    },
+    // deletePost(parent, { id }, ctx, info) {
+    //   return ctx.db.mutation.deletePost({where: { id } }, info)
+    // },
+    // publish(parent, { id }, ctx, info) {
+    //   return ctx.db.mutation.updatePost(
+    //     {
+    //       where: { id },
+    //       data: { isPublished: true },
+    //     },
+    //     info,
+    //   )
+    // },
   },
 }
 
