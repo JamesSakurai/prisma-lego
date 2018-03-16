@@ -4,6 +4,8 @@ import {graphql} from 'react-apollo'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import '../styles/HomePage.css'
+
 class UpdateBlock extends Component {
   constructor(props) {
     super(props)

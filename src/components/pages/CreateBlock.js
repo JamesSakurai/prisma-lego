@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import '../styles/HomePage.css'
+
 class CreateBlock extends React.Component {
   state = {
     size: '',
@@ -13,7 +15,7 @@ class CreateBlock extends React.Component {
   render() {
     return (
       <div className="pa4 flex justify-center bg-white">
-        <form onSubmit={this.handlePost}>
+        <form className="flexBox" onSubmit={this.handlePost}>
           <h1>Create Block</h1>
           <input
             autoFocus
