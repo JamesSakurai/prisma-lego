@@ -7,6 +7,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import {
   BrowserRouter as Router,
 } from 'react-router-dom'
+// import AppBar from 'material-ui/AppBar'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+// import IconButton from 'material-ui/IconButton'
 
 
 import Nav from './components/helpers/nav'
@@ -23,12 +26,17 @@ const client = new ApolloClient({
 })
 
 const App =() => (
-  <Router>
-    <div>
-      <Nav/>
-      <Routes/>
-    </div>
-  </Router>
+  <div>
+    <Router>
+      <MuiThemeProvider>
+      {/*<AppBar title="Menu"/>*/}
+      <div>
+        <Nav/>
+        <Routes/>
+      </div>
+      </MuiThemeProvider>
+    </Router>
+  </div>
 )
 
 

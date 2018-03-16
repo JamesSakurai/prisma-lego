@@ -32,10 +32,42 @@ const resolvers = {
         info,
       )
     },
+    updateReview(parent, { id, username, product, comment }, ctx, info) {
+      return ctx.db.mutation.updateReview(
+        { data: { username, product, comment },
+          where: { id }
+        },
+        info,
+      )
+    },
+    deleteReview(parent, { id }, ctx, info) {
+      return ctx.db.mutation.deleteReview(
+        {
+          where: { id }
+        },
+        info
+      )
+    },
     createBlock(parent, { size, color, price }, ctx, info) {
       return ctx.db.mutation.createBlock(
         { data: { size, color, price } },
         info,
+      )
+    },
+    updateBlock(parent, { id, size, color, price }, ctx, info) {
+      return ctx.db.mutation.updateBlock(
+        { data: { size, color, price },
+          where: { id }
+        },
+        info,
+      )
+    },
+    deleteBlock(parent, { id }, ctx, info) {
+      return ctx.db.mutation.deleteBlock(
+        {
+          where: { id }
+        },
+        info
       )
     },
     // deletePost(parent, { id }, ctx, info) {

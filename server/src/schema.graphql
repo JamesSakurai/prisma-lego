@@ -11,7 +11,11 @@ type Query {
 type Mutation {
 #  createDraft(title: String!, text: String): Post
   createBlock(size: String!, color: String!, price: String!): Block
+  updateBlock(id: ID!, size: String, color: String, price: String): Block
+  deleteBlock(id: ID!): Block
   createReview(username: String!, product: String!, comment: String!): Review
+  updateReview(id: ID!, username: String, product: String, comment: String): Review
+  deleteReview(id: ID!): Review
 #  deletePost(id: ID!): Post
 #  publish(id: ID!): Post
 }
